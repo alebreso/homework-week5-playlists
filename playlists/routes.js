@@ -12,12 +12,15 @@ router.post('/playlists', auth, (req, res, next) => {
   Playlist
     .create(req.body)
     .then(playlist => {
-      if (!playlist) {
-        return res.status(404).send({
-          message: `playlist does not exist`
+      if(playlist.userId !== req.user.id) {
+        playlist.destroy().then(() => {
+          return res.status(401).send({
+            message: `forbidden`
+          })
         })
-      }
-      return res.status(201).send(playlist)
+      }else{
+        return res.status(201).send(playlist)
+      }  
     })
     .catch(error => next(error))
   })

@@ -38,7 +38,7 @@ router.post('/tokens', (req, res) => {
         }
         else {
           res.status(400).send({
-            message: 'Password was incorrect'
+            message: 'Please supply a valid email and password'
           })
         }
       })
@@ -54,7 +54,7 @@ router.post('/tokens', (req, res) => {
 router.get('/secret-endpoint', auth, (req, res) => {
   res.send({
     message: `Thanks for visiting the secret endpoint ${req.user.email}.`,
-  })
+  }).catch(err => res.send(req.body))
 })
 
 module.exports = router
