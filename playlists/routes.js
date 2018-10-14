@@ -44,6 +44,11 @@ router.get('/playlists/:id', auth, (req, res, next) => {
           message: `Playlist does not exist`
         })
       }
+      if(playlist.userId !== req.user.id){
+        return res.status(401).send({
+          message:`forbidden`
+        })
+      }
       return res.send(playlist)
     })
     .catch(error => next(error))
