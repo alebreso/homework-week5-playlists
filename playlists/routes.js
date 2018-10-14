@@ -5,7 +5,7 @@ const auth = require('../auth/middleware')
 
 const router = new Router()
 
-router.post('/playlists', (req, res, next) => {
+router.post('/playlists', auth, (req, res, next) => {
   if(!req.body.name) return res.status(422).send({
     message:"can't create a palylist without a name"
   })
@@ -22,7 +22,7 @@ router.post('/playlists', (req, res, next) => {
     .catch(error => next(error))
   })
 
-router.get('/playlists', (req, res, next) => {
+router.get('/playlists', auth, (req, res, next) => {
 
   Playlist
     .findAll({ where: { userId: req.user.id } })
@@ -32,7 +32,7 @@ router.get('/playlists', (req, res, next) => {
     .catch(error => next(error))
 })
 
-router.get('/playlists/:id', (req, res, next) => {
+router.get('/playlists/:id', auth, (req, res, next) => {
   Playlist
     .findById(req.params.id,{ include: [User] })
     .then(playlist => {
@@ -46,7 +46,7 @@ router.get('/playlists/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-router.delete('/playlists/:id', (req, res, next) => {
+router.delete('/playlists/:id', auth, (req, res, next) => {
   Playlist
     .findById(req.params.id)
     .then(playlist => {
